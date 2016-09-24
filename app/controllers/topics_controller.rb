@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_topic, only: [:show, :edit, :update, :destroy]
+  before_action :set_topic, only: [:show, :edit, :update, :destroy, :upvote]
 
   # GET /topics
   def index
@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
     @topic = Topic.new(topic_params)
 
     if @topic.save
-      redirect_to @topic, notice: 'Topic was successfully created.'
+      redirect_to topics_path, notice: 'Topic was successfully created.'
     else
       render :new
     end
@@ -33,7 +33,7 @@ class TopicsController < ApplicationController
   # PATCH/PUT /topics/1
   def update
     if @topic.update(topic_params)
-      redirect_to @topic, notice: 'Topic was successfully updated.'
+      redirect_to topics_path, notice: 'Topic was successfully updated.'
     else
       render :edit
     end
@@ -43,6 +43,11 @@ class TopicsController < ApplicationController
   def destroy
     @topic.destroy
     redirect_to topics_url, notice: 'Topic was successfully destroyed.'
+  end
+
+  def upvote
+    @topic.votes.create
+    redirect_to(topics_path)
   end
 
   private
